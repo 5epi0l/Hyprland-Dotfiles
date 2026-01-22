@@ -30,7 +30,8 @@ ShellRoot {
     property int volumeLevel: 0
     property string activeWindow: "Window"
     property string currentLayout: "Tile"
-    property string cpuTemp: "0"
+    property string cpuTemp: "0°C"
+    property string weatherTemp: "0"
     // CPU tracking
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
@@ -95,6 +96,24 @@ ShellRoot {
         }
         Component.onCompleted: running = true
     }
+
+    // Weather
+
+    Process {
+    id: weatherProc
+    command: ["sh", "-c", "curl -s 'https://wttr.in/prayagraj?format=j1' | jq -r '.current_condition[].FeelsLikeC'"]
+
+    stdout: SplitParser {
+        onRead: data => {
+            if (!data) return
+            var temp = parseInt(data.trim()) || 0
+            weatherTemp = temp + "°C"
+        }
+    }
+
+    Component.onCompleted: running = true
+    }
+
 
     // Disk usage
     Process {
@@ -180,6 +199,13 @@ ShellRoot {
             volProc.running = true
             cpuTempProc.running = true
         }
+    }
+
+    Timer {
+    interval: 900000   // 15 minutes
+    running: true
+    repeat: true
+    onTriggered: weatherProc.running = true
     }
 
     // Event-based updates for window/layout (instant)
@@ -326,6 +352,23 @@ ShellRoot {
                     }
 
                     Text {
+                        text: "󰖐  " + weatherTemp  
+                        color: root.colRed
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: false 
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                      }
+                    Text {
                         text: " " + cpuTemp 
                         color: root.colRed
                         font.pixelSize: root.fontSize
@@ -430,7 +473,7 @@ ShellRoot {
                             interval: 1000
                             running: true
                             repeat: true
-                            onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM dd - HH:mm")
+                            onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM dd - HH:mm:ss")
                         }
                     }
 
