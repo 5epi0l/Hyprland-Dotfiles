@@ -19,8 +19,8 @@ ShellRoot {
     property color colBlue: "#7aa2f7"
 
     // Font
-    property string fontFamily: "JetBrainsMono Nerd Font"
-    property int fontSize: 14
+    property string fontFamily: "Iosevka Nerd Font Propo"
+    property int fontSize: 16
 
     // System info properties
     property string kernelVersion: "Linux"
@@ -292,7 +292,7 @@ ShellRoot {
                                 color: parent.isActive ? root.colCyan : (parent.hasWindows ? root.colCyan : root.colMuted)
                                 font.pixelSize: root.fontSize
                                 font.family: root.fontFamily
-                                font.bold: false 
+                                font.bold: true 
                                 anchors.centerIn: parent
                             }
 
@@ -325,7 +325,7 @@ ShellRoot {
                         color: root.colFg
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false
+                        font.bold: true 
                         Layout.leftMargin: 5
                         Layout.rightMargin: 5
                     }
@@ -344,7 +344,7 @@ ShellRoot {
                         color: root.colPurple
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false
+                        font.bold: true
                         Layout.fillWidth: true
                         Layout.leftMargin: 8
                         elide: Text.ElideRight
@@ -352,11 +352,11 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "󰖐  " + weatherTemp  
+                        text: "󰖐 " + weatherTemp  
                         color: root.colRed
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false 
+                        font.bold: true 
                         Layout.rightMargin: 8
                     }
 
@@ -373,7 +373,7 @@ ShellRoot {
                         color: root.colRed
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false 
+                        font.bold: true 
                         Layout.rightMargin: 8
                     }
 
@@ -389,11 +389,11 @@ ShellRoot {
 
 
                     Text {
-                        text: "   " + cpuUsage + "%"
+                        text: " " + cpuUsage + "%"
                         color: root.colYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false
+                        font.bold: true 
                         Layout.rightMargin: 8
                     }
 
@@ -407,11 +407,11 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "󰘚   " + memUsage + "%"
+                        text: "󰘚 " + memUsage + "%"
                         color: root.colCyan
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false 
+                        font.bold: true 
                         Layout.rightMargin: 8
                     }
 
@@ -425,11 +425,11 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "   " + diskUsage + "%"
+                        text: " " + diskUsage + "%"
                         color: root.colBlue
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false 
+                        font.bold: true 
                         Layout.rightMargin: 8
                     }
 
@@ -443,11 +443,11 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "   " + volumeLevel + "%"
+                        text: " " + volumeLevel + "%"
                         color: root.colPurple
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false
+                        font.bold: true
                         Layout.rightMargin: 8
                     }
 
@@ -466,7 +466,7 @@ ShellRoot {
                         color: root.colCyan
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
-                        font.bold: false 
+                        font.bold: true 
                         Layout.rightMargin: 8
 
                         Timer {
