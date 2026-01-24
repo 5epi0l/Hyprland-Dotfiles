@@ -23,14 +23,33 @@ ShellRoot {
     property int fontSize: 16
 
     // System info properties
-    property string kernelVersion: "Linux"
+    property string kernelVersion: "Arch"
+    property string powerProfile: ""
     property int cpuUsage: 0
     property int memUsage: 0
     property int diskUsage: 0
     property int volumeLevel: 0
     property string activeWindow: "Window"
     property string currentLayout: "Tile"
-    property string cpuTemp: "0°C"
+    property string cpuTemp: "0"
+    property int cpuTempInt: parseInt(cpuTemp, 10)
+    property color tempColor: {
+        if (cpuTempInt < 50 ) return "#8fbcb3"
+        else if (cpuTempInt < 70) return "#e5c07b"
+        else return "#e06c75"
+    }
+    property color powerProfileColor: {
+    switch (powerProfile) {
+    case "power-saver":
+        return "#98c379" // green
+    case "balanced":
+        return "#61afef" // blue
+    case "performance":
+        return "#e06c75" // red
+    default:
+        return "#abb2bf" // neutral / unknown
+        }
+    }
     property string weatherTemp: "0"
     // CPU tracking
     property var lastCpuIdle: 0
@@ -45,6 +64,20 @@ ShellRoot {
                 if (data) kernelVersion = data.trim()
             }
         }
+        Component.onCompleted: running = true
+    }
+
+    // Power Profile
+     Process {
+        id: powerProfileProc
+        command: ["sh", "-c", "powerprofilesctl get"]
+        stdout: SplitParser {
+            onRead: data => {
+                const v = data.trim()
+                if (v != powerProfile) powerProfile = v
+            }
+        }
+
         Component.onCompleted: running = true
     }
 
@@ -198,6 +231,7 @@ ShellRoot {
             diskProc.running = true
             volProc.running = true
             cpuTempProc.running = true
+            powerProfileProc.running = true
         }
     }
 
@@ -352,8 +386,40 @@ ShellRoot {
                     }
 
                     Text {
+                        text: "󰣇 " + kernelVersion  
+                        color: root.colCyan
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true 
+                        Layout.rightMargin: 8
+                    }
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                      }
+                    Text {
+                        text: "󰠠 " + powerProfile  
+                        color: powerProfileColor
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true 
+                        Layout.rightMargin: 8
+                    }
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                      }
+                    Text {
                         text: "󰖐 " + weatherTemp  
-                        color: root.colRed
+                        color: root.colYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true 
@@ -370,7 +436,7 @@ ShellRoot {
                       }
                     Text {
                         text: " " + cpuTemp 
-                        color: root.colRed
+                        color: tempColor
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true 
